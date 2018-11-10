@@ -12,8 +12,10 @@ import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
 import { RouterModule, PreloadAllModules } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {CoreModule} from './core/core.module';
 @NgModule({
   imports: [
+    CoreModule,
     BrowserModule,
     FormsModule,
     HttpClientModule,

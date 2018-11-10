@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ExternalDashboardTileService } from './external-dashboard-tile.service';
 import { LazyDashboardTileService } from './lazy-dashboard-tile.service';
+import {WidgetMessagingService} from '../core/services/widget-messaging.service';
+import {BaseWidgetComponent} from '../core/common/base-widget.component';
+import {NgElement, WithProperties} from '@angular/elements';
 
 @Component({
   selector: 'app-dashboard',
@@ -11,7 +14,8 @@ export class DashboardComponent implements OnInit {
 
   constructor(
     private lazyService: LazyDashboardTileService,
-    private externalService: ExternalDashboardTileService
+    private externalService: ExternalDashboardTileService,
+    private widgetMessagingService: WidgetMessagingService
   ) { }
 
   ngOnInit() {
@@ -28,7 +32,7 @@ export class DashboardComponent implements OnInit {
   addDefault(): void {
     this.add('dashboard-tile');
   }
-  
+
   addLazy(): void {
     this.lazyService.load().then(_ => {
       this.add('lazy-dashboard-tile');
@@ -44,7 +48,7 @@ export class DashboardComponent implements OnInit {
 
     const data = this.getData();
 
-    const tile = document.createElement(tileKind);
+    const tile: NgElement & WithProperties<BaseWidgetComponent>  = document.createElement(tileKind) as any;
     tile.setAttribute('class', 'col-lg-4 col-md-3 col-sm-2');
     tile.setAttribute('a', '' + data[0]);
     tile.setAttribute('b', '' + data[1]);
@@ -53,6 +57,7 @@ export class DashboardComponent implements OnInit {
     const content = document.getElementById('content');
     content.appendChild(tile);
 
+    this.widgetMessagingService.register(tile);
   }
 
 }
